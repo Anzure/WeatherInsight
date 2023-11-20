@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <dayinfo.h>
+#include <weatherinfo.h>
 
 class ModelController : public QObject
 {
@@ -21,6 +23,7 @@ private slots:
 
 private:
     QNetworkAccessManager *networkManager;
+    QList<DayInfo*> dayInfoList;
 };
 
 #endif // MODELCONTROLLER_H

@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QDateTime>
+#include <QTime>
 
 ModelController::ModelController(QObject *parent) : QObject(parent)
 {
@@ -41,15 +42,38 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
     QJsonArray dataPointList = jsonObject["list"].toArray();
     for (const QJsonValue &value : dataPointList) {
         QJsonObject dataPointObj = value.toObject();
+
         QString timestamp = dataPointObj["dt_txt"].toString();
+        QDateTime dateTime = QDateTime::fromString(timestamp, "yyyy-MM-dd HH:mm:ss");
+        //if (dateTime.time().hour() != 15) continue;
+        QString dateValue = dateTime.toString("dd.MM.yyyy HH:mm");
+        QDate date = dateTime.date();
+
         QJsonArray weatherArray = dataPointObj["weather"].toArray();
         QJsonObject weatherObj = weatherArray.at(0).toObject();
+        QString weatherIcon = weatherObj["icon"].toString();
         QString weatherDesc = weatherObj["description"].toString();
-        //qInfo() << timestamp + " " + weatherDesc;
+        QString iconUrl = "https://openweathermap.org/img/wn/" + weatherIcon + "@2x.png";
 
-        QDateTime dateTime = QDateTime::fromString(timestamp, "yyyy-MM-dd HH:mm:ss");
-        QString dateValue = dateTime.toString("dd.MM.yyyy HH:mm");
-        qInfo() << dateValue + " " + weatherDesc;
+        QJsonObject mainDetailsObj = dataPointObj["main"].toObject();
+        double temperature = mainDetailsObj["temp"].toDouble();
+
+        WeatherInfo* weatherInfo = new WeatherInfo();
+        weatherInfo->setTimestamp(dateTime);
+        weatherInfo->setDescription(weatherDesc);
+        weatherInfo->setTemperature(temperature);
+        weatherInfo->setIconUrl(iconUrl);
+
+        //DayInfo dayInfo = DayInfo();
+        //for (const DayInfo *otherDay : dayInfoList) {
+        //    if (otherDay-)
+        //}
+
+        //QMap<QTime, WeatherInfo> dayForecast = *new QMap<QTime, WeatherInfo>();
+        //dayInfoList.append(dayInfo);
+        //dayForecast.insert(dateTime.time(), *weatherInfo);
+
+        qInfo() << dateValue + " -> " + weatherDesc + ", " + QString::number(temperature) + " degrees";
+
     }
 }
-

@@ -11,8 +11,8 @@ public:
     explicit WeatherInfo(QObject *parent = nullptr);
     QDateTime getTimestamp() const;
     void setTimestamp(const QDateTime &newTimestamp);
-    int getTemperatureCel() const;
-    void setTemperatureCel(int newTemperatureCel);
+    int getTemperature() const;
+    void setTemperature(int newTemperature);
     QString getIconUrl() const;
     void setIconUrl(const QString &newIconUrl);
     QString getDescription() const;
@@ -22,7 +22,7 @@ signals:
 
 private:
     QDateTime timestamp;
-    int temperatureCel;
+    int temperature;
     QString iconUrl;
     QString description;
 };

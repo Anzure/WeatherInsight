@@ -16,14 +16,14 @@ void WeatherInfo::setTimestamp(const QDateTime &newTimestamp)
     timestamp = newTimestamp;
 }
 
-int WeatherInfo::getTemperatureCel() const
+int WeatherInfo::getTemperature() const
 {
-    return temperatureCel;
+    return temperature;
 }
 
-void WeatherInfo::setTemperatureCel(int newTemperatureCel)
+void WeatherInfo::setTemperature(int newTemperature)
 {
-    temperatureCel = newTemperatureCel;
+    temperature = newTemperature;
 }
 
 QString WeatherInfo::getIconUrl() const
