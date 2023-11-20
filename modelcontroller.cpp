@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QDateTime>
 
 ModelController::ModelController(QObject *parent) : QObject(parent)
 {
@@ -32,7 +33,7 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
     }
 
     QString responseStr = reply->readAll();
-    qInfo() << "Response: " << responseStr;
+    qDebug() << "Response:" << responseStr;
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(responseStr.toUtf8());
     QJsonObject jsonObject = jsonResponse.object();
@@ -44,7 +45,11 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
         QJsonArray weatherArray = dataPointObj["weather"].toArray();
         QJsonObject weatherObj = weatherArray.at(0).toObject();
         QString weatherDesc = weatherObj["description"].toString();
-        qInfo() << timestamp + " " + weatherDesc;
+        //qInfo() << timestamp + " " + weatherDesc;
+
+        QDateTime dateTime = QDateTime::fromString(timestamp, "yyyy-MM-dd HH:mm:ss");
+        QString dateValue = dateTime.toString("dd.MM.yyyy HH:mm");
+        qInfo() << dateValue + " " + weatherDesc;
     }
 }
 
