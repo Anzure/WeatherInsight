@@ -42,14 +42,8 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
         QJsonObject dataPointObj = value.toObject();
         QString timestamp = dataPointObj["dt_txt"].toString();
         QJsonArray weatherArray = dataPointObj["weather"].toArray();
-
-        QString weatherDesc;
-        for (const QJsonValue &value : weatherArray) {
-            QJsonObject weatherObj = value.toObject();
-            weatherDesc.append(weatherObj["description"].toString() + ",");
-        }
-        weatherDesc.removeLast();
-
+        QJsonObject weatherObj = weatherArray.at(0).toObject();
+        QString weatherDesc = weatherObj["description"].toString();
         qInfo() << timestamp + " " + weatherDesc;
     }
 }
