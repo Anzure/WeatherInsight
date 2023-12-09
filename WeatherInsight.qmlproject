@@ -89,7 +89,7 @@ Project {
     importPaths: [ "imports", "asset_imports" ]
 
     /* Required for deployment */
-    targetDirectory: "/opt/WeatherApp"
+    targetDirectory: "/opt/WeatherInsight"
 
     qdsVersion: "4.1"
 

@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 import QtQuick 6.2
-import WeatherApp
+import WeatherInsight
 
 Window {
     width: mainScreen.width
     height: mainScreen.height
 
     visible: true
-    title: "WeatherApp"
+    title: "WeatherInsight"
 
     Screen01 {
         id: mainScreen

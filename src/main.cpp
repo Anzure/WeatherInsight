@@ -7,11 +7,9 @@
 #include "app_environment.h"
 #include "import_qml_components_plugins.h"
 #include "import_qml_plugins.h"
-#include "modelcontroller.h"
 
 int main(int argc, char *argv[])
 {
-    // Prepare startup
     set_qt_environment();
 
     QGuiApplication app(argc, argv);
@@ -35,10 +33,5 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Test weather API
-    ModelController modelcontroller;
-    modelcontroller.getWeatherData("Kongsberg");
-
-    // Start application
     return app.exec();
 }

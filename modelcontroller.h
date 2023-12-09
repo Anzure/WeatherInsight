@@ -2,10 +2,6 @@
 #define MODELCONTROLLER_H
 
 #include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <dayinfo.h>
-#include <weatherinfo.h>
 
 class ModelController : public QObject
 {
@@ -15,15 +11,6 @@ public:
 
 signals:
 
-public slots:
-    void getWeatherData(QString city);
-
-private slots:
-    void onNetworkReply(QNetworkReply *reply);
-
-private:
-    QNetworkAccessManager *networkManager;
-    QList<DayInfo*> dayInfoList;
 };
 
 #endif // MODELCONTROLLER_H

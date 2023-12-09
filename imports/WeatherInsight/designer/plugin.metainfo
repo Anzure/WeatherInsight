@@ -1,6 +1,6 @@
 MetaInfo {
     Type {
-        name: "WeatherApp.EventListSimulator"
+        name: "WeatherInsight.EventListSimulator"
         icon: ":/qtquickplugin/images/item-icon16.png"
 
         Hints {
