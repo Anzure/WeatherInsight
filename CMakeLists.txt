@@ -14,7 +14,9 @@ if (Qt6_VERSION VERSION_GREATER_EQUAL 6.3)
 endif()
 
 qt_add_executable(WeatherInsightApp src/main.cpp
-    modelcontroller.h modelcontroller.cpp)
+    modelcontroller.h modelcontroller.cpp
+    currentweather.h currentweather.cpp
+    weatherforecast.h weatherforecast.cpp)
 
 qt_add_resources(WeatherInsightApp "configuration"
     PREFIX "/"
