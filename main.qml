@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import "modelcontroller.h"
 
 ApplicationWindow {
     title: "Weather Insight"
@@ -8,6 +9,20 @@ ApplicationWindow {
     height: 800
     visible: true
     color: darkModeSwitch.checked ? "#303030" : "#f0f0f0"
+
+    property double currentTemperature: 0.0
+    property string currentWeatherType: ""
+    property string currentIconUrl: ""
+
+    Connections {
+        target: modelController
+        onDataReceived: {
+            console.log("Retrived weather data from API:", data);
+        }
+        onErrorOccurred: {
+            console.log("Failed to retrieve weather data:", error);
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent

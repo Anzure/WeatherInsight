@@ -12,6 +12,8 @@ public:
     explicit ModelController(QObject *parent = nullptr);
 
 signals:
+    void dataReceived(const QString &data);
+    void errorOccurred(const QString &error);
 
 public slots:
     void getWeatherData(QString city);

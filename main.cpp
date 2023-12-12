@@ -1,7 +1,9 @@
 #include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include "modelcontroller.h"
+#include "weatherinfo.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,6 +12,13 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/icon.ico"));
 
     QQmlApplicationEngine engine;
+
+    WeatherInfo weatherInfo;
+    ModelController modelController;
+
+    engine.rootContext()->setContextProperty("weatherInfo", &weatherInfo);
+    engine.rootContext()->setContextProperty("modelController", &modelController);
+
     const QUrl url(u"qrc:Main/main.qml"_qs);
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated, &app,

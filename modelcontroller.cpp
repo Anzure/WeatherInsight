@@ -31,11 +31,13 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
 {
     if (reply->error()) {
         qDebug() << "Error:" << reply->errorString();
+        emit errorOccurred(reply->errorString());
         return;
     }
 
     QString responseStr = reply->readAll();
     qDebug() << "Response:" << responseStr;
+    emit dataReceived(responseStr);
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(responseStr.toUtf8());
     QJsonObject jsonObject = jsonResponse.object();
@@ -46,7 +48,7 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
 
         QString timestamp = dataPointObj["dt_txt"].toString();
         QDateTime dateTime = QDateTime::fromString(timestamp, "yyyy-MM-dd HH:mm:ss");
-        //if (dateTime.time().hour() != 15) continue;
+        if (dateTime.time().hour() != 12) continue;
         QString dateValue = dateTime.toString("dd.MM.yyyy HH:mm");
         QDate date = dateTime.date();
 
@@ -65,16 +67,8 @@ void ModelController::onNetworkReply(QNetworkReply *reply)
         weatherInfo->setTemperature(temperature);
         weatherInfo->setIconUrl(iconUrl);
 
-        //DayInfo dayInfo = DayInfo();
-        //for (const DayInfo *otherDay : dayInfoList) {
-        //    if (otherDay-)
-        //}
-
-        //QMap<QTime, WeatherInfo> dayForecast = *new QMap<QTime, WeatherInfo>();
-        //dayInfoList.append(dayInfo);
-        //dayForecast.insert(dateTime.time(), *weatherInfo);
-
         qInfo() << dateValue + " -> " + weatherDesc + ", " + QString::number(temperature) + " degrees";
 
     }
+
 }
