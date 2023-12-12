@@ -37,10 +37,6 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    // Test weather API
-    weatherController.getCurrentWeather("Kongsberg");
-    forecastController.getWeatherForecast("Kongsberg");
-
     // Start application
     return app.exec();
 }

@@ -12,6 +12,7 @@ ApplicationWindow {
     property double currentTemperature: 0.0
     property string currentWeatherType: ""
     property string currentIconUrl: ""
+    property string popupText: ""
 
     Connections {
         target: weatherController
@@ -25,6 +26,8 @@ ApplicationWindow {
         }
         onErrorOccurred: {
             console.log("Failed to retrieve current weather data:", error);
+            popupText = error;
+            popupBox.open();
         }
     }
 
@@ -33,6 +36,7 @@ ApplicationWindow {
         onDataReceived: {
             //console.log("Retrived weather forecast data from API:", data);
             var weatherForecast = JSON.parse(data);
+            forecastList.model.clear();
             for (var i = 0; i < weatherForecast.list.length; i++) {
                 var forecast = weatherForecast.list[i];
                 var temperature = forecast.main.temp;
@@ -46,6 +50,8 @@ ApplicationWindow {
         }
         onErrorOccurred: {
             console.log("Failed to retrieve weather forecast data:", error);
+            popupText = error;
+            popupBox.open();
         }
     }
 
@@ -57,7 +63,6 @@ ApplicationWindow {
             id: cityInput
             placeholderText: "Navn på by"
             placeholderTextColor: darkModeSwitch.checked ? "#fff" : "#000"
-            text: "Kongsberg"
             Layout.fillWidth: true
             Layout.margins: 10
             color: darkModeSwitch.checked ? "#fff" : "#000"
@@ -68,6 +73,10 @@ ApplicationWindow {
             text: "Vis værdata"
             Layout.fillWidth: true
             Layout.margins: 10
+            onClicked: {
+                weatherController.getCurrentWeather(cityInput.text);
+                forecastController.getWeatherForecast(cityInput.text);
+            }
         }
 
         Rectangle {
@@ -81,18 +90,36 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 spacing: 5
 
-                Text {
-                    id: currentTemp
-                    text: currentTemperature + " °C"
-                    font.pixelSize: 40
-                    color: darkModeSwitch.checked ? "#fff" : "#000"
+                Row {
+                    Text {
+                        id: currentTemp
+                        text: currentTemperature + " °C"
+                        font.pixelSize: 40
+                        color: darkModeSwitch.checked ? "#fff" : "#000"
+                    }
                 }
 
-                Text {
-                    id: currentWeather
-                    text: currentWeatherType
-                    font.pixelSize: 20
-                    color: darkModeSwitch.checked ? "#fff" : "#000"
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Image {
+                        id: imageIcon
+                        source: currentIconUrl
+                        width: 70
+                        height: 70
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        id: currentWeather
+                        text: currentWeatherType
+                        font.pixelSize: 25
+                        color: darkModeSwitch.checked ? "#fff" : "#000"
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
             }
         }
@@ -129,4 +156,47 @@ ApplicationWindow {
             Layout.margins: 10
         }
     }
+
+    Popup {
+        id: popupBox
+        width: 400
+        height: 250
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape
+        background: null
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        Rectangle {
+            width: parent.width
+            height: parent.height
+            color: darkModeSwitch.checked ? "#303030" : "#f0f0f0"
+            border.color: "#000"
+
+            Text {
+                text: popupText
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 20
+                width: parent.width - 50
+                height: parent.height - 30
+                color: darkModeSwitch.checked ? "#fff" : "#000"
+                wrapMode: Text.Wrap
+            }
+
+            Button {
+                text: "OK"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 20
+                onClicked: {
+                    popupBox.close()
+                }
+            }
+        }
+    }
+
+
 }
