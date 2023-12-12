@@ -1,22 +1,22 @@
-#ifndef MODELCONTROLLER_H
-#define MODELCONTROLLER_H
+#ifndef FORECASTCONTROLLER_H
+#define FORECASTCONTROLLER_H
 
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-class ModelController : public QObject
+class ForecastController : public QObject
 {
     Q_OBJECT
 public:
-    explicit ModelController(QObject *parent = nullptr);
+    explicit ForecastController(QObject *parent = nullptr);
 
 signals:
     void dataReceived(const QString &data);
     void errorOccurred(const QString &error);
 
 public slots:
-    void getWeatherData(QString city);
+    void getWeatherForecast(QString city);
 
 private slots:
     void onNetworkReply(QNetworkReply *reply);
@@ -25,4 +25,4 @@ private:
     QNetworkAccessManager *networkManager;
 };
 
-#endif // MODELCONTROLLER_H
+#endif // FORECASTCONTROLLER_H

@@ -1,7 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
-import "modelcontroller.h"
 
 ApplicationWindow {
     title: "Weather Insight"
@@ -15,12 +14,38 @@ ApplicationWindow {
     property string currentIconUrl: ""
 
     Connections {
-        target: modelController
+        target: weatherController
         onDataReceived: {
-            console.log("Retrived weather data from API:", data);
+            //console.log("Retrived current weather data from API:", data);
+            var currentWeather = JSON.parse(data);
+            currentTemperature = currentWeather.main.temp;
+            currentWeatherType = currentWeather.weather[0].main;
+            currentIconUrl = "https://openweathermap.org/img/wn/" + currentWeather.weather[0].icon + "@2x.png";
+            console.log("Current weather:", currentWeatherType, currentTemperature + " degrees", currentIconUrl);
         }
         onErrorOccurred: {
-            console.log("Failed to retrieve weather data:", error);
+            console.log("Failed to retrieve current weather data:", error);
+        }
+    }
+
+    Connections {
+        target: forecastController
+        onDataReceived: {
+            //console.log("Retrived weather forecast data from API:", data);
+            var weatherForecast = JSON.parse(data);
+            for (var i = 0; i < weatherForecast.list.length; i++) {
+                var forecast = weatherForecast.list[i];
+                var temperature = forecast.main.temp;
+                var weatherType = forecast.weather[0].main;
+                var date = new Date(forecast.dt * 1000);
+                var day = date.toLocaleDateString("no-NO", { weekday: "long" });
+                if (date.getUTCHours() != 12) continue;
+                console.log("Weather forecast:", day, weatherType, temperature + " degrees");
+                forecastList.model.append({ day: day, temp: temperature + " °C", condition: weatherType });
+            }
+        }
+        onErrorOccurred: {
+            console.log("Failed to retrieve weather forecast data:", error);
         }
     }
 
@@ -32,6 +57,7 @@ ApplicationWindow {
             id: cityInput
             placeholderText: "Navn på by"
             placeholderTextColor: darkModeSwitch.checked ? "#fff" : "#000"
+            text: "Kongsberg"
             Layout.fillWidth: true
             Layout.margins: 10
             color: darkModeSwitch.checked ? "#fff" : "#000"
@@ -57,14 +83,14 @@ ApplicationWindow {
 
                 Text {
                     id: currentTemp
-                    text: "11°C"
+                    text: currentTemperature + " °C"
                     font.pixelSize: 40
                     color: darkModeSwitch.checked ? "#fff" : "#000"
                 }
 
                 Text {
                     id: currentWeather
-                    text: "Regnvær"
+                    text: currentWeatherType
                     font.pixelSize: 20
                     color: darkModeSwitch.checked ? "#fff" : "#000"
                 }
@@ -76,9 +102,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: ListModel {
-                ListElement { day: "Mandag"; temp: "-5°C"; condition: "Overskyet" }
-                ListElement { day: "Tirsdag"; temp: "-13°C"; condition: "Sol" }
-                ListElement { day: "Onsdag"; temp: "-8°C"; condition: "Snøvær" }
+
             }
             delegate: Rectangle {
                 width: forecastList.width
@@ -92,8 +116,8 @@ ApplicationWindow {
                     anchors.leftMargin: 20
 
                     Text { text: day; color: darkModeSwitch.checked ? "#fff" : "#000" }
-                    Text { text: temp; color: darkModeSwitch.checked ? "#fff" : "#000" }
                     Text { text: condition; color: darkModeSwitch.checked ? "#fff" : "#000" }
+                    Text { text: temp; color: darkModeSwitch.checked ? "#fff" : "#000" }
                 }
             }
         }

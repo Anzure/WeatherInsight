@@ -2,8 +2,8 @@
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "modelcontroller.h"
-#include "weatherinfo.h"
+#include "forecastcontroller.h"
+#include "weathercontroller.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    WeatherInfo weatherInfo;
-    ModelController modelController;
+    WeatherController weatherController;
+    ForecastController forecastController;
 
-    engine.rootContext()->setContextProperty("weatherInfo", &weatherInfo);
-    engine.rootContext()->setContextProperty("modelController", &modelController);
+    engine.rootContext()->setContextProperty("weatherController", &weatherController);
+    engine.rootContext()->setContextProperty("forecastController", &forecastController);
 
     const QUrl url(u"qrc:Main/main.qml"_qs);
     QObject::connect(
@@ -38,10 +38,9 @@ int main(int argc, char *argv[])
     }
 
     // Test weather API
-    ModelController modelcontroller;
-    modelcontroller.getWeatherData("Kongsberg");
+    weatherController.getCurrentWeather("Kongsberg");
+    forecastController.getWeatherForecast("Kongsberg");
 
     // Start application
-
     return app.exec();
 }
