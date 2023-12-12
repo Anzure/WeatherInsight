@@ -1,18 +1,13 @@
-// Copyright (C) 2021 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
-
 #include <QGuiApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
-
-#include "app_environment.h"
-#include "import_qml_components_plugins.h"
-#include "import_qml_plugins.h"
+#include "modelcontroller.h"
 
 int main(int argc, char *argv[])
 {
-    set_qt_environment();
-
+    // Prepare startup
     QGuiApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/icon.ico"));
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:Main/main.qml"_qs);
@@ -32,6 +27,12 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty()) {
         return -1;
     }
+
+    // Test weather API
+    ModelController modelcontroller;
+    modelcontroller.getWeatherData("Kongsberg");
+
+    // Start application
 
     return app.exec();
 }

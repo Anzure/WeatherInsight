@@ -13,15 +13,17 @@ if (Qt6_VERSION VERSION_GREATER_EQUAL 6.3)
     qt_standard_project_setup()
 endif()
 
-qt_add_executable(WeatherInsightApp src/main.cpp
+qt_add_executable(WeatherInsightApp main.cpp
     modelcontroller.h modelcontroller.cpp
-    currentweather.h currentweather.cpp
-    weatherforecast.h weatherforecast.cpp)
+    weatherinfo.h weatherinfo.cpp
+    resources.qrc
+)
 
 qt_add_resources(WeatherInsightApp "configuration"
     PREFIX "/"
     FILES
         qtquickcontrols2.conf
+        icon.ico
 )
 
 target_link_libraries(WeatherInsightApp PRIVATE

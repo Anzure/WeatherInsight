@@ -20,11 +20,6 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.margins: 10
             color: darkModeSwitch.checked ? "#fff" : "#000"
-            //background: Rectangle {
-            //    color: "transparent"
-            //    border.color: darkModeSwitch.checked ? "#f0f0f0" : "#303030"
-            //    radius: 8
-            //}
         }
 
         Button {
